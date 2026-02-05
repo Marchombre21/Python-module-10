@@ -13,17 +13,21 @@
 def artifact_sorter(artifacts: list[dict]) -> list[dict]:
     return sorted(artifacts, key=lambda x: x["power"], reverse=True)
 
+
 def power_filter(mages: list[dict], min_power: int) -> list[dict]:
     return list(filter(lambda x: x["power"] >= min_power, mages))
+
 
 def spell_transformer(spells: list[str]) -> list[str]:
     return list(map(lambda x: "*" + x + "*", spells))
 
+
 def mage_stats(mages: list[dict]) -> dict:
     powers: list = [mage["power"] for mage in mages]
-    calc = lambda x: x(powers)
-    return {'max_power': calc(max), 'min_power': calc(min),
+    return {'max_power': (lambda x: max(x))(powers),
+            'min_power': (lambda x: min(x))(powers),
             'avg_power': round(sum(powers) / len(powers), 2)}
+
 
 def main():
     artifacts = [
