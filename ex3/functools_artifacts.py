@@ -45,9 +45,12 @@ def base_enchantment(power: int, element: str, target: str):
 
 
 def partial_enchanter(base_enchantment: Callable) -> dict[str, Callable]:
-    """A partial is an callable object. When called, works like the function
-    passed as first parameter at the creation of the object.At the creation
-    we can 'pre-pass' some arguments to 'register' them in partial.
+    """A partial is an callable object (an instance). When called, works like
+    the function passed as first parameter at the creation of the object.At
+    the creation we can 'pre-pass' some arguments to 'register' them in
+    partial. When created, the args passed are stored in attributes: obj.args,
+    a tuple containing args, obj.func, the original function and obj.keywords,
+    a dict containing the nammed args (power: int = 50).
     """
     fire = partial(base_enchantment, 50, "fire")
     ice = partial(base_enchantment, 50, "ice")
@@ -63,7 +66,10 @@ def memoized_fibonacci(n: int) -> int:
     with the exact same args. It avoids the calculation process and saves time.
     If the maxsize isn't None, the cache will can contain maximum maxsize
     results. After that it will remove from cache the leastest recently used
-    result.
+    result. The results are stored in a dict with args as key and result as
+    value. It's a chained list and when a result is reuse, its node is put at
+    the end of list so, when the maxsize is reached, the first nodes are
+    deleted.
     """
     if n < 2:
         return n
@@ -116,6 +122,7 @@ def main():
     dictionnary: dict = partial_enchanter(base_enchantment)
     print(dictionnary.get("fire_enchant")("plant"))
     print(dictionnary.get("ice_enchant")("dragon"))
+    print("Arguments pre-passed:", dictionnary.get("ice_enchant").args)
     print(dictionnary.get("lightning_enchant")("darkness"))
     print()
 
@@ -144,4 +151,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(e)

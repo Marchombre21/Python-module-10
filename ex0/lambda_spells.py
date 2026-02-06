@@ -11,11 +11,11 @@
 # ****************************************************************************#
 
 def artifact_sorter(artifacts: list[dict]) -> list[dict]:
-    return sorted(artifacts, key=lambda x: x["power"], reverse=True)
+    return sorted(artifacts, key=lambda x: x.get("power"), reverse=True)
 
 
 def power_filter(mages: list[dict], min_power: int) -> list[dict]:
-    return list(filter(lambda x: x["power"] >= min_power, mages))
+    return list(filter(lambda x: x.get("power") >= min_power, mages))
 
 
 def spell_transformer(spells: list[str]) -> list[str]:
@@ -23,10 +23,10 @@ def spell_transformer(spells: list[str]) -> list[str]:
 
 
 def mage_stats(mages: list[dict]) -> dict:
-    powers: list = [mage["power"] for mage in mages]
+    powers: list = [mage.get("power") for mage in mages]
     return {'max_power': (lambda x: max(x))(powers),
             'min_power': (lambda x: min(x))(powers),
-            'avg_power': round(sum(powers) / len(powers), 2)}
+            'avg_power': (lambda x: round(sum(x) / len(x), 2))(powers)}
 
 
 def main():
@@ -54,4 +54,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(e)

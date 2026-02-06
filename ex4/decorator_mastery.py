@@ -82,8 +82,7 @@ class MageGuild:
     @spell_timer
     @staticmethod
     def validate_mage_name(name: str) -> bool:
-        if len(name) > 2 and all(map(lambda x: x.isalpha() or x == " ",
-                                     [x for x in name])):
+        if len(name) > 2 and all(x.isalpha() or x.isspace() for x in name):
             return True
         return False
 
@@ -111,4 +110,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(e)
